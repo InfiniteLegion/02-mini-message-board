@@ -1,0 +1,33 @@
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="/styles.css">
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <div class="messages-wrapper">
+                <% messages.forEach((message) => { %>
+                    <div class="message-wrapper">
+                        <p class="user-date">
+                            <span class="date">
+                                [<%= message.date %>]
+                            </span>
+
+                            <span class="user">
+                                <%= message.user %>
+                            </span>
+                        </p>
+
+                        <p class="message-text">
+                            <%= message.text %>
+                        </p>
+                    </div>
+                <% }); %>
+            </div>
+
+            <div class="message-box-wrapper">
+                <%- include('messageBox') %>
+            </div>
+        </div>
+    </body>
+</html>
