@@ -1,5 +1,5 @@
-<form>
-    <input class="form-input" type="text" placeholder="Name">
-    <input type="text" class="form-input" placeholder="Text">
+<form method="POST" action="/new">
+    <input name="user" class="form-input" type="text" placeholder="Name" required>
+    <input name="text" type="text" class="form-input" placeholder="Text" required>
     <button type="submit">Send</button>
 </form>
