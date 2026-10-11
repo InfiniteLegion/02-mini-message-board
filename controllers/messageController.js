@@ -1,23 +1,10 @@
-const fs = require("fs/promises");
-const path = require("path");
-
-const dir = path.join(process.cwd(), "public");
-const filePath = path.join(dir, "db.json");
-
-const readMessages = async () => {
-  try {
-    return JSON.parse(await fs.readFile(filePath, "utf-8"));
-  } catch (error) {
-    console.error(error);
-  }
-};
+const db = require("../db/queries.js");
 
 const getMessages = async (req, res) => {
   try {
-    const content = await readMessages();
-    const messages = content.map((message) => {
+    const data = await db.getAllUsers();
+    const messages = data.map((message) => {
       const date = new Date(message.date);
-
       return { ...message, date: date.toLocaleString() };
     });
 
@@ -30,12 +17,10 @@ const getMessages = async (req, res) => {
 
 const addMessage = async (req, res) => {
   try {
-    const user = req.body.user;
-    const text = req.body.text;
-    const data = await readMessages();
+    const { username, text } = req.body;
+    const date = new Date();
 
-    data.push({ user: user, text: text, date: new Date() });
-    await fs.writeFile(filePath, JSON.stringify(data));
+    await db.addMessage(username, text, date);
 
     res.redirect("/");
   } catch (error) {
