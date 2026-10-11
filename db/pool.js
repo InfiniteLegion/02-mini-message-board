@@ -1,11 +1,16 @@
 require("dotenv").config();
 const { Pool } = require("pg");
 
-const isLocal = /localhost|127.0.0.1/.test(process.env.DATABASE_URL || "");
+const url = new URL(process.env.DATABASE_URL);
+const isLocal = ["localhost", "127.0.0.1"].includes(url.hostname);
 
-console.log("DB local?", isLocal, "| NODE_ENV:", process.env.NODE_ENV, "| URL set:", !!process.env.DATABASE_URL);
+console.log("DB host:", url.hostname, "| params:", url.search || "(none)", "| local:", isLocal);
 
 module.exports = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  host: url.hostname,
+  port: Number(url.port) || 5432,
+  user: decodeURIComponent(url.username),
+  password: decodeURIComponent(url.password),
+  database: url.pathname.slice(1),
   ssl: isLocal ? false : { rejectUnauthorized: false },
 });
